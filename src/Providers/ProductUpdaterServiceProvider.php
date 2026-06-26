@@ -28,6 +28,10 @@ final class ProductUpdaterServiceProvider extends PackageServiceProvider
             ->hasConfigFile('product-updater')
             ->hasCommands(CheckCommand::class, UpdateCommand::class, DoctorCommand::class)
             ->hasDoctorChecks(DoctorCommand::CHECKS);
+
+        if (config('product-updater.api.enabled')) {
+            $package->hasRoute('api');
+        }
     }
 
     #[Override]

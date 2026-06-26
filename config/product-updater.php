@@ -59,6 +59,17 @@ return [
     'lock_ttl' => (int) env('PRODUCT_UPDATER_LOCK_TTL', 600),
 
     /*
+    | Opt-in HTTP health endpoint (off by default — this is a CLI-first package).
+    | When enabled, GET {prefix}/health returns the doctor checks as JSON
+    | (200 healthy / 503 degraded).
+    */
+    'api' => [
+        'enabled' => env('PRODUCT_UPDATER_API_ENABLED', false),
+        'prefix' => env('PRODUCT_UPDATER_API_PREFIX', 'api/product-updater/v1'),
+        'middleware' => ['api'],
+    ],
+
+    /*
     | Download/HTTP behaviour.
     */
     'timeout' => env('PRODUCT_UPDATER_TIMEOUT', 300),
