@@ -18,6 +18,9 @@ final readonly class ProductRelease
         public ?string $summary = null,
         public ?string $changelog = null,
         public bool $hasSql = false,
+        public ?string $checksum = null,    // expected SHA-256 of the archive (hex)
+        public ?string $signature = null,   // base64 detached signature of the archive
+        public ?string $minPhp = null,      // minimum PHP version this release requires
     ) {}
 
     /**
@@ -40,6 +43,8 @@ final readonly class ProductRelease
             'summary' => $this->summary,
             'changelog' => $this->changelog,
             'has_sql' => $this->hasSql,
+            'checksum' => $this->checksum,
+            'min_php' => $this->minPhp,
         ];
     }
 }

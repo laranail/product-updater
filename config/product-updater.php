@@ -41,6 +41,14 @@ return [
     'timeout' => env('PRODUCT_UPDATER_TIMEOUT', 300),
     'verify_tls' => env('PRODUCT_UPDATER_VERIFY_TLS', true),
 
+    /*
+    | Archive integrity. When the source publishes a SHA-256 for a release, the
+    | downloaded file is verified before extraction. Set a PEM public key to also
+    | verify a detached signature the source provides.
+    */
+    'verify_checksum' => env('PRODUCT_UPDATER_VERIFY_CHECKSUM', true),
+    'public_key' => env('PRODUCT_UPDATER_PUBLIC_KEY'),
+
     // Transient-failure retry policy for the HTTP update source.
     'retries' => (int) env('PRODUCT_UPDATER_RETRIES', 2),
     'retry_delay' => (int) env('PRODUCT_UPDATER_RETRY_DELAY', 250),

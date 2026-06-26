@@ -7,6 +7,7 @@ namespace Simtabi\Laranail\Product\Updater;
 use Illuminate\Filesystem\Filesystem;
 use Simtabi\Laranail\Licence\Verifier\LicenseManager;
 use Simtabi\Laranail\Product\Updater\Contracts\UpdateSource;
+use Simtabi\Laranail\Product\Updater\Events\IntegrityCheckFailed;
 use Simtabi\Laranail\Product\Updater\Events\SystemUpdateAvailable;
 use Simtabi\Laranail\Product\Updater\Events\SystemUpdateCachesCleared;
 use Simtabi\Laranail\Product\Updater\Events\SystemUpdateCachesClearing;
@@ -84,10 +85,52 @@ final readonly class UpdateManager
         $this->source->download($release->updateId, $destination, $this->licenseToken());
 
         $this->validateArchive($destination);
+        $this->verifyIntegrity($release, $destination);
 
         SystemUpdateDownloaded::dispatch($destination);
 
         return $destination;
+    }
+
+    /**
+     * Verify the downloaded archive against the source-published SHA-256 (and an
+     * optional detached signature when a public key is configured). Deletes the
+     * file and aborts before extraction on any mismatch.
+     */
+    private function verifyIntegrity(ProductRelease $release, string $path): void
+    {
+        if (! (bool) config('product-updater.verify_checksum', true)) {
+            return;
+        }
+
+        if ($release->checksum !== null && $release->checksum !== '') {
+            $actual = hash_file('sha256', $path) ?: '';
+
+            if (! hash_equals(strtolower($release->checksum), strtolower($actual))) {
+                $this->files->delete($path);
+                IntegrityCheckFailed::dispatch($path, 'checksum mismatch');
+
+                throw UpdaterException::checksumMismatch($release->checksum, $actual);
+            }
+        }
+
+        $publicKey = config('product-updater.public_key');
+
+        if (is_string($publicKey) && $publicKey !== '' && $release->signature !== null && $release->signature !== '') {
+            $valid = openssl_verify(
+                (string) $this->files->get($path),
+                base64_decode($release->signature, true) ?: '',
+                $publicKey,
+                OPENSSL_ALGO_SHA256,
+            ) === 1;
+
+            if (! $valid) {
+                $this->files->delete($path);
+                IntegrityCheckFailed::dispatch($path, 'signature invalid');
+
+                throw UpdaterException::signatureInvalid();
+            }
+        }
     }
 
     /**
