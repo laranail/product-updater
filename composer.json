@@ -1,0 +1,60 @@
+{
+    "name": "laranail/product-updater",
+    "description": "Self-update engine for licensed Laravel products — checks an update source, downloads and verifies release archives, extracts files, runs migrations and publishes assets. License-gated via laranail/license-verifier.",
+    "keywords": ["laravel", "updater", "self-update", "license", "laranail"],
+    "homepage": "https://opensource.simtabi.com/product-updater/",
+    "license": "MIT",
+    "authors": [
+        { "name": "Simtabi LLC", "email": "opensource@simtabi.com", "homepage": "https://opensource.simtabi.com", "role": "Organization" },
+        { "name": "Imani Manyara", "email": "imani@simtabi.com", "role": "Maintainer" }
+    ],
+    "support": {
+        "issues": "https://github.com/laranail/product-updater/issues",
+        "source": "https://github.com/laranail/product-updater",
+        "docs": "https://opensource.simtabi.com/product-updater/docs/"
+    },
+    "require": {
+        "php": "^8.4 || ^8.5",
+        "ext-zip": "*",
+        "illuminate/support": "^13.0",
+        "illuminate/http": "^13.0",
+        "illuminate/filesystem": "^13.0",
+        "laranail/package-tools": "^0.5",
+        "laranail/license-verifier": "@dev"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.18",
+        "orchestra/testbench": "^10.6 || ^11.0",
+        "pestphp/pest": "^4.0",
+        "pestphp/pest-plugin-laravel": "^4.0"
+    },
+    "repositories": [
+        { "type": "path", "url": "../verifier" },
+        { "type": "path", "url": "../../package/tools" }
+    ],
+    "autoload": {
+        "psr-4": { "Simtabi\\Laranail\\Product\\Updater\\": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Simtabi\\Laranail\\Product\\Updater\\Tests\\": "tests/" }
+    },
+    "scripts": {
+        "post-autoload-dump": "@php vendor/bin/testbench package:discover --ansi",
+        "test": "vendor/bin/pest --colors=always",
+        "analyse": "vendor/bin/phpstan analyse",
+        "format": "vendor/bin/pint"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": { "pestphp/pest-plugin": true, "phpstan/extension-installer": true }
+    },
+    "extra": {
+        "laravel": {
+            "providers": ["Simtabi\\Laranail\\Product\\Updater\\Providers\\ProductUpdaterServiceProvider"],
+            "aliases": { "ProductUpdater": "Simtabi\\Laranail\\Product\\Updater\\Facades\\ProductUpdater" }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

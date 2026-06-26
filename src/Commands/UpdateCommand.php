@@ -1,0 +1,54 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Simtabi\Laranail\Product\Updater\Commands;
+
+use Simtabi\Laranail\Product\Updater\Exceptions\UpdaterException;
+
+final class UpdateCommand extends Command
+{
+    protected $signature = 'laranail::product-updater.update {--download-only : Download without extracting}';
+
+    protected $description = 'Download and apply the latest product update (license-gated)';
+
+    /** @var list<string> */
+    protected array $commandAliases = ['product:update'];
+
+    public function handle(): int
+    {
+        $release = $this->updater()->checkUpdate();
+
+        if ($release === null) {
+            $this->services->display()->success('Already up to date.');
+
+            return self::SUCCESS;
+        }
+
+        try {
+            $archive = $this->services->interaction()->showSpinner(
+                "Downloading v{$release->version}…",
+                fn (): string => $this->updater()->download($release),
+            );
+
+            if ($this->option('download-only')) {
+                $this->services->display()->success("Downloaded to {$archive}");
+
+                return self::SUCCESS;
+            }
+
+            $this->services->interaction()->showSpinner(
+                'Applying update…',
+                fn (): bool => $this->updater()->extract($archive),
+            );
+
+            $this->services->display()->success("Updated to v{$release->version}.");
+
+            return self::SUCCESS;
+        } catch (UpdaterException $e) {
+            $this->services->display()->error($e->getMessage());
+
+            return self::FAILURE;
+        }
+    }
+}
