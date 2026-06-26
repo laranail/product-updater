@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Product\Updater\Sources;
 
 use Carbon\Carbon;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use Simtabi\Laranail\Product\Updater\Contracts\UpdateSource;
 use Simtabi\Laranail\Product\Updater\ValueObjects\ProductRelease;
@@ -47,6 +49,13 @@ final class HttpUpdateSource implements UpdateSource
         $request = Http::baseUrl(rtrim((string) config('product-updater.source.url'), '/').'/')
             ->timeout((int) config('product-updater.timeout', 300))
             ->acceptJson()
+            ->retry(
+                (int) config('product-updater.retries', 2),
+                (int) config('product-updater.retry_delay', 250),
+                static fn (\Throwable $e): bool => $e instanceof ConnectionException
+                    || ($e instanceof RequestException && (bool) $e->response->serverError()),
+                throw: false,
+            )
             ->withHeaders(array_filter(['X-API-KEY' => config('product-updater.source.api_key')]));
 
         if (! (bool) config('product-updater.verify_tls', true)) {
