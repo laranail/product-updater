@@ -16,7 +16,7 @@ use Simtabi\Laranail\Product\Updater\UpdateManager;
  * @method static void validateArchive(string $archive)
  * @method static void clearCaches()
  *
- * @see \Simtabi\Laranail\Product\Updater\UpdateManager
+ * @see UpdateManager
  */
 final class ProductUpdater extends Facade
 {

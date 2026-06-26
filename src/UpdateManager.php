@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Product\Updater;
 
 use Illuminate\Filesystem\Filesystem;
-use Simtabi\Laranail\Licence\Verifier\Contracts\Capabilities\SupportsEntitlements;
-use Simtabi\Laranail\Licence\Verifier\Contracts\LicenseStore;
 use Simtabi\Laranail\Licence\Verifier\Drivers\DriverManager;
+use Simtabi\Laranail\Licence\Verifier\LicenseManager;
 use Simtabi\Laranail\Product\Updater\Contracts\UpdateSource;
 use Simtabi\Laranail\Product\Updater\Events\SystemUpdateAvailable;
 use Simtabi\Laranail\Product\Updater\Events\SystemUpdateCachesCleared;
@@ -148,15 +147,15 @@ final class UpdateManager
             return;
         }
 
-        $driver = $this->drivers->active();
+        $manager = app(LicenseManager::class);
 
-        if (! $driver->verify()->isUsable()) {
+        if (! $manager->verify()->isUsable()) {
             throw UpdaterException::requiresLicense();
         }
 
         $entitlement = config('product-updater.require_entitlement');
 
-        if ($entitlement && $driver instanceof SupportsEntitlements && ! $driver->entitledTo((string) $entitlement)) {
+        if ($entitlement && ! $manager->entitledTo((string) $entitlement)) {
             throw UpdaterException::requiresEntitlement((string) $entitlement);
         }
     }
@@ -174,13 +173,7 @@ final class UpdateManager
 
     private function licenseToken(): ?string
     {
-        $key = (string) config('license-verifier.license_key');
-
-        if ($key === '' || ! app()->bound(LicenseStore::class)) {
-            return null;
-        }
-
-        return app(LicenseStore::class)->get($key)['token'] ?? null;
+        return app(LicenseManager::class)->currentToken();
     }
 
     private function downloadPath(string $version): string

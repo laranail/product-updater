@@ -55,7 +55,7 @@ it('rejects an archive containing a .env file', function () {
     mkdir($dir, 0755, true);
     $archive = $dir.'/update.zip';
 
-    $zip = new ZipArchive();
+    $zip = new ZipArchive;
     $zip->open($archive, ZipArchive::CREATE);
     $zip->addFromString('.env', 'APP_KEY=leak');
     $zip->addFromString('padding.bin', random_bytes(4096)); // incompressible → archive > 1KB

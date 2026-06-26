@@ -14,7 +14,7 @@ final class Zipper
 {
     public function extract(string $archive, string $destination): bool
     {
-        $zip = new ZipArchive();
+        $zip = new ZipArchive;
 
         if ($zip->open($archive) !== true) {
             return false;
@@ -28,7 +28,7 @@ final class Zipper
 
     public function contains(string $archive, string $entry): bool
     {
-        $zip = new ZipArchive();
+        $zip = new ZipArchive;
 
         if ($zip->open($archive) !== true) {
             return false;
@@ -42,7 +42,7 @@ final class Zipper
 
     public function read(string $archive, string $entry): ?string
     {
-        $zip = new ZipArchive();
+        $zip = new ZipArchive;
 
         if ($zip->open($archive) !== true) {
             return null;
@@ -59,7 +59,7 @@ final class Zipper
      */
     public function assertValid(string $archive): void
     {
-        $zip = new ZipArchive();
+        $zip = new ZipArchive;
         $result = $zip->open($archive);
 
         if ($result !== true) {

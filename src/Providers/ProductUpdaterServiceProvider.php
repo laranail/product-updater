@@ -31,7 +31,7 @@ final class ProductUpdaterServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         $this->app->bind(UpdateSource::class, static fn (): UpdateSource => match ((string) config('product-updater.source.driver', 'http')) {
-            default => new HttpUpdateSource(),
+            default => new HttpUpdateSource,
         });
 
         $this->app->singleton(UpdateManager::class, static fn ($app): UpdateManager => new UpdateManager(
