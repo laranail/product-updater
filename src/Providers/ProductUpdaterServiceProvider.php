@@ -8,7 +8,9 @@ use Illuminate\Filesystem\Filesystem;
 use Override;
 use Simtabi\Laranail\Package\Tools\Package;
 use Simtabi\Laranail\Package\Tools\Providers\PackageServiceProvider;
+use Simtabi\Laranail\Package\Tools\Services\Doctor\DoctorService;
 use Simtabi\Laranail\Product\Updater\Commands\CheckCommand;
+use Simtabi\Laranail\Product\Updater\Commands\DoctorCommand;
 use Simtabi\Laranail\Product\Updater\Commands\UpdateCommand;
 use Simtabi\Laranail\Product\Updater\Contracts\UpdateSource;
 use Simtabi\Laranail\Product\Updater\Sources\HttpUpdateSource;
@@ -23,7 +25,28 @@ final class ProductUpdaterServiceProvider extends PackageServiceProvider
         $package
             ->name('laranail/product-updater')
             ->hasConfigFile('product-updater')
-            ->hasCommands(CheckCommand::class, UpdateCommand::class);
+            ->hasCommands(CheckCommand::class, UpdateCommand::class, DoctorCommand::class);
+    }
+
+    /**
+     * Surface the updater's health checks in the unified
+     * `laranail::package-tools.doctor` command.
+     *
+     * (Self-registered into the DoctorService singleton because the
+     * package-tools boot chain does not yet wire `hasDoctorCheck()` through.)
+     */
+    #[Override]
+    public function packageBooted(): void
+    {
+        if (! $this->app->bound(DoctorService::class)) {
+            return;
+        }
+
+        $service = $this->app->make(DoctorService::class);
+
+        foreach (DoctorCommand::CHECKS as $check) {
+            $service->register($check);
+        }
     }
 
     #[Override]
