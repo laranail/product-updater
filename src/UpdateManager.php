@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Product\Updater;
 
 use Illuminate\Filesystem\Filesystem;
-use Simtabi\Laranail\Licence\Verifier\Drivers\DriverManager;
 use Simtabi\Laranail\Licence\Verifier\LicenseManager;
 use Simtabi\Laranail\Product\Updater\Contracts\UpdateSource;
 use Simtabi\Laranail\Product\Updater\Events\SystemUpdateAvailable;
@@ -30,7 +29,6 @@ final class UpdateManager
         private readonly UpdateSource $source,
         private readonly Zipper $zip,
         private readonly Filesystem $files,
-        private readonly DriverManager $drivers,
     ) {}
 
     public function currentVersion(): string

@@ -6,7 +6,6 @@ namespace Simtabi\Laranail\Product\Updater\Providers;
 
 use Illuminate\Filesystem\Filesystem;
 use Override;
-use Simtabi\Laranail\Licence\Verifier\Drivers\DriverManager;
 use Simtabi\Laranail\Package\Tools\Package;
 use Simtabi\Laranail\Package\Tools\Providers\PackageServiceProvider;
 use Simtabi\Laranail\Product\Updater\Commands\CheckCommand;
@@ -38,7 +37,6 @@ final class ProductUpdaterServiceProvider extends PackageServiceProvider
             $app->make(UpdateSource::class),
             $app->make(Zipper::class),
             $app->make(Filesystem::class),
-            $app->make(DriverManager::class),
         ));
     }
 }

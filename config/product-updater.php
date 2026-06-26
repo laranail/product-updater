@@ -40,4 +40,8 @@ return [
     */
     'timeout' => env('PRODUCT_UPDATER_TIMEOUT', 300),
     'verify_tls' => env('PRODUCT_UPDATER_VERIFY_TLS', true),
+
+    // Transient-failure retry policy for the HTTP update source.
+    'retries' => (int) env('PRODUCT_UPDATER_RETRIES', 2),
+    'retry_delay' => (int) env('PRODUCT_UPDATER_RETRY_DELAY', 250),
 ];
