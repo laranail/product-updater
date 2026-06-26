@@ -21,6 +21,10 @@ abstract class TestCase extends Orchestra
     protected function defineEnvironment($app): void
     {
         $app['config']->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
+        // Use the array cache so the verifier's verify-cache doesn't hit a database
+        // cache table (newer Laravel defaults the cache store to "database").
+        $app['config']->set('cache.default', 'array');
+        $app['config']->set('license-verifier.cache.store', 'array');
         $app['config']->set('license-verifier.heartbeat.enabled', false);
         $app['config']->set('product-updater.source.url', 'https://updates.test');
         $app['config']->set('product-updater.product_id', 'PROD-1');

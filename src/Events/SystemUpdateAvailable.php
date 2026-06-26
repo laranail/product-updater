@@ -7,9 +7,9 @@ namespace Simtabi\Laranail\Product\Updater\Events;
 use Illuminate\Foundation\Events\Dispatchable;
 use Simtabi\Laranail\Product\Updater\ValueObjects\ProductRelease;
 
-final class SystemUpdateAvailable
+final readonly class SystemUpdateAvailable
 {
     use Dispatchable;
 
-    public function __construct(public readonly ProductRelease $release) {}
+    public function __construct(public ProductRelease $release) {}
 }

@@ -23,12 +23,12 @@ use Simtabi\Laranail\Product\Updater\ValueObjects\ProductRelease;
 /**
  * Orchestrates the self-update flow, gated by laranail/license-verifier.
  */
-final class UpdateManager
+final readonly class UpdateManager
 {
     public function __construct(
-        private readonly UpdateSource $source,
-        private readonly Zipper $zip,
-        private readonly Filesystem $files,
+        private UpdateSource $source,
+        private Zipper $zip,
+        private Filesystem $files,
     ) {}
 
     public function currentVersion(): string

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Product\Updater\Commands;
 
+use Simtabi\Laranail\Product\Updater\ValueObjects\ProductRelease;
+
 final class CheckCommand extends Command
 {
     protected $signature = 'laranail::product-updater.check {--json}';
@@ -23,7 +25,7 @@ final class CheckCommand extends Command
             return self::SUCCESS;
         }
 
-        if ($release === null) {
+        if (! $release instanceof ProductRelease) {
             $this->services->display()->success('You are running the latest version ('.$this->updater()->currentVersion().').');
 
             return self::SUCCESS;

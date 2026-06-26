@@ -7,7 +7,7 @@ use Simtabi\Laranail\Product\Updater\Exceptions\UpdaterException;
 use Simtabi\Laranail\Product\Updater\UpdateManager;
 use Simtabi\Laranail\Product\Updater\ValueObjects\ProductRelease;
 
-it('detects an available update via the http source', function () {
+it('detects an available update via the http source', function (): void {
     Http::fake(['updates.test/*' => Http::response([
         'status' => true,
         'update_id' => 'u-42',
@@ -22,13 +22,13 @@ it('detects an available update via the http source', function () {
         ->and($release->isNewerThan('1.0.0'))->toBeTrue();
 });
 
-it('reports no update when the source returns the same version', function () {
+it('reports no update when the source returns the same version', function (): void {
     Http::fake(['updates.test/*' => Http::response(['status' => true, 'update_id' => 'u', 'version' => '1.0.0'])]);
 
     expect(app(UpdateManager::class)->checkUpdate())->toBeNull();
 });
 
-it('refuses to download when unlicensed', function () {
+it('refuses to download when unlicensed', function (): void {
     config()->set('product-updater.require_license', true);
     config()->set('license-verifier.default', 'paseto'); // unactivated → not usable
 
@@ -38,7 +38,7 @@ it('refuses to download when unlicensed', function () {
         ->toThrow(UpdaterException::class, 'valid license is required');
 });
 
-it('allows download when licensed via the null driver', function () {
+it('allows download when licensed via the null driver', function (): void {
     config()->set('product-updater.require_license', true);
     config()->set('license-verifier.default', 'null');
 
@@ -50,7 +50,7 @@ it('allows download when licensed via the null driver', function () {
         ->toThrow(UpdaterException::class, 'archive is invalid');
 });
 
-it('rejects an archive containing a .env file', function () {
+it('rejects an archive containing a .env file', function (): void {
     $dir = sys_get_temp_dir().'/lv-zip-'.uniqid();
     mkdir($dir, 0755, true);
     $archive = $dir.'/update.zip';

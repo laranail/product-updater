@@ -6,9 +6,9 @@ namespace Simtabi\Laranail\Product\Updater\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 
-final class SystemUpdateDownloaded
+final readonly class SystemUpdateDownloaded
 {
     use Dispatchable;
 
-    public function __construct(public readonly string $path) {}
+    public function __construct(public string $path) {}
 }

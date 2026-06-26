@@ -19,6 +19,6 @@ abstract class Command extends ConsoleCommand
 
     protected function wantsJson(): bool
     {
-        return $this->hasOption('json') && (bool) $this->option('json');
+        return $this->input->hasOption('json') && (bool) $this->input->getOption('json');
     }
 }

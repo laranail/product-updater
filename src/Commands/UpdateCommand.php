@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Product\Updater\Commands;
 
 use Simtabi\Laranail\Product\Updater\Exceptions\UpdaterException;
+use Simtabi\Laranail\Product\Updater\ValueObjects\ProductRelease;
 
 final class UpdateCommand extends Command
 {
@@ -19,7 +20,7 @@ final class UpdateCommand extends Command
     {
         $release = $this->updater()->checkUpdate();
 
-        if ($release === null) {
+        if (! $release instanceof ProductRelease) {
             $this->services->display()->success('Already up to date.');
 
             return self::SUCCESS;

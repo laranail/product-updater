@@ -11,6 +11,7 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use Simtabi\Laranail\Product\Updater\Contracts\UpdateSource;
 use Simtabi\Laranail\Product\Updater\ValueObjects\ProductRelease;
+use Throwable;
 
 /**
  * HTTP update source (Botble-style): POSTs check_update and streams
@@ -52,14 +53,14 @@ final class HttpUpdateSource implements UpdateSource
             ->retry(
                 (int) config('product-updater.retries', 2),
                 (int) config('product-updater.retry_delay', 250),
-                static fn (\Throwable $e): bool => $e instanceof ConnectionException
+                static fn (Throwable $e): bool => $e instanceof ConnectionException
                     || ($e instanceof RequestException && (bool) $e->response->serverError()),
                 throw: false,
             )
             ->withHeaders(array_filter(['X-API-KEY' => config('product-updater.source.api_key')]));
 
         if (! (bool) config('product-updater.verify_tls', true)) {
-            $request = $request->withoutVerifying();
+            return $request->withoutVerifying();
         }
 
         return $request;
