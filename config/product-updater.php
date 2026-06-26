@@ -70,6 +70,16 @@ return [
     ],
 
     /*
+    | Log (for observability) when the verifier reports the license revoked or
+    | deactivated. The updater caches nothing to invalidate — the download/extract
+    | license gate already blocks updates; this just records why.
+    */
+    'license_sync' => [
+        'enabled' => env('PRODUCT_UPDATER_LICENSE_SYNC', true),
+        'log_channel' => env('PRODUCT_UPDATER_LICENSE_SYNC_CHANNEL'),
+    ],
+
+    /*
     | Download/HTTP behaviour.
     */
     'timeout' => env('PRODUCT_UPDATER_TIMEOUT', 300),

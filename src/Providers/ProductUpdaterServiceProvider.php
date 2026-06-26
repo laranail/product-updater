@@ -6,12 +6,15 @@ namespace Simtabi\Laranail\Product\Updater\Providers;
 
 use Illuminate\Filesystem\Filesystem;
 use Override;
+use Simtabi\Laranail\Licence\Verifier\Events\LicenseDeactivated;
+use Simtabi\Laranail\Licence\Verifier\Events\LicenseRevoked;
 use Simtabi\Laranail\Package\Tools\Package;
 use Simtabi\Laranail\Package\Tools\Providers\PackageServiceProvider;
 use Simtabi\Laranail\Product\Updater\Commands\CheckCommand;
 use Simtabi\Laranail\Product\Updater\Commands\DoctorCommand;
 use Simtabi\Laranail\Product\Updater\Commands\UpdateCommand;
 use Simtabi\Laranail\Product\Updater\Contracts\UpdateSource;
+use Simtabi\Laranail\Product\Updater\Listeners\SyncLicenseState;
 use Simtabi\Laranail\Product\Updater\Sources\HttpUpdateSource;
 use Simtabi\Laranail\Product\Updater\Support\EnvBackup;
 use Simtabi\Laranail\Product\Updater\Support\UpdateLock;
@@ -41,6 +44,29 @@ final class ProductUpdaterServiceProvider extends PackageServiceProvider
         // Short translation namespace (hasTranslations() also registers the full
         // laranail/product-updater namespace) so keys read product-updater::…
         $this->loadTranslationsFrom(__DIR__.'/../../resources/lang', 'product-updater');
+
+        $this->registerLicenseSync();
+    }
+
+    /**
+     * Log (for observability) when the verifier reports the license revoked or
+     * deactivated, so operators know why updates start being refused. Bound only
+     * when the verifier is installed (soft dependency).
+     */
+    private function registerLicenseSync(): void
+    {
+        $events = $this->app['events'];
+
+        $map = [
+            LicenseRevoked::class => 'revoked',
+            LicenseDeactivated::class => 'deactivated',
+        ];
+
+        foreach ($map as $event => $method) {
+            if (class_exists($event)) {
+                $events->listen($event, [SyncLicenseState::class, $method]);
+            }
+        }
     }
 
     #[Override]
