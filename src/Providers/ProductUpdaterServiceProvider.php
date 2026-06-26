@@ -14,6 +14,8 @@ use Simtabi\Laranail\Product\Updater\Commands\DoctorCommand;
 use Simtabi\Laranail\Product\Updater\Commands\UpdateCommand;
 use Simtabi\Laranail\Product\Updater\Contracts\UpdateSource;
 use Simtabi\Laranail\Product\Updater\Sources\HttpUpdateSource;
+use Simtabi\Laranail\Product\Updater\Support\EnvBackup;
+use Simtabi\Laranail\Product\Updater\Support\UpdateLock;
 use Simtabi\Laranail\Product\Updater\Support\Zipper;
 use Simtabi\Laranail\Product\Updater\UpdateManager;
 
@@ -60,6 +62,8 @@ final class ProductUpdaterServiceProvider extends PackageServiceProvider
             $app->make(UpdateSource::class),
             $app->make(Zipper::class),
             $app->make(Filesystem::class),
+            $app->make(EnvBackup::class),
+            $app->make(UpdateLock::class),
         ));
     }
 }

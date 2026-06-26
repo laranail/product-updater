@@ -53,6 +53,11 @@ class UpdaterException extends RuntimeException
         return new self('System requirements for this update are not met: '.$reason);
     }
 
+    public static function updateInProgress(): self
+    {
+        return new self('Another update is already in progress.');
+    }
+
     public static function productMismatch(): self
     {
         return new self('The update archive product ID does not match this installation.');

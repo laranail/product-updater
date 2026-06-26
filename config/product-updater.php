@@ -36,6 +36,29 @@ return [
     ],
 
     /*
+    | Apply-phase steps. Both run by default after extraction; a host that manages
+    | its own migrations/assets can disable either. `publish.tag` must be set for
+    | the publish step to do anything (avoids clobbering host customisations).
+    */
+    'steps' => [
+        'migrate' => env('PRODUCT_UPDATER_RUN_MIGRATIONS', true),
+        'publish' => env('PRODUCT_UPDATER_RUN_PUBLISH', true),
+    ],
+    'publish' => [
+        'tag' => env('PRODUCT_UPDATER_PUBLISH_TAG'),
+    ],
+
+    /*
+    | Back up the host .env before applying an update and restore it on failure.
+    */
+    'backup_env' => env('PRODUCT_UPDATER_BACKUP_ENV', true),
+    'backup_path' => env('PRODUCT_UPDATER_BACKUP_PATH', storage_path('app/updates/backups')),
+    'backup_keep' => (int) env('PRODUCT_UPDATER_BACKUP_KEEP', 5),
+
+    // Seconds the apply lock is held before auto-expiring.
+    'lock_ttl' => (int) env('PRODUCT_UPDATER_LOCK_TTL', 600),
+
+    /*
     | Download/HTTP behaviour.
     */
     'timeout' => env('PRODUCT_UPDATER_TIMEOUT', 300),
