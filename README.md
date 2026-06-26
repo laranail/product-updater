@@ -1,5 +1,6 @@
 # laranail/product-updater
 
+[![Tests](https://github.com/laranail/product-updater/actions/workflows/tests.yml/badge.svg)](https://github.com/laranail/product-updater/actions)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 > License-gated self-update engine for Laravel products.
