@@ -66,13 +66,12 @@ final class DoctorCommand extends Command
             $row['result']->message,
         ], $report));
 
-        $this->line(sprintf(
-            '%d passed, %d warning(s), %d failure(s), %d skipped.',
-            $summary['pass'],
-            $summary['warn'],
-            $summary['fail'],
-            $summary['skip'],
-        ));
+        $this->line(__('product-updater::product-updater.doctor.summary', [
+            'pass' => $summary['pass'],
+            'warn' => $summary['warn'],
+            'fail' => $summary['fail'],
+            'skip' => $summary['skip'],
+        ]));
 
         return $failed ? self::FAILURE : self::SUCCESS;
     }

@@ -26,12 +26,21 @@ final class ProductUpdaterServiceProvider extends PackageServiceProvider
         $package
             ->name('laranail/product-updater')
             ->hasConfigFile('product-updater')
+            ->hasTranslations()
             ->hasCommands(CheckCommand::class, UpdateCommand::class, DoctorCommand::class)
             ->hasDoctorChecks(DoctorCommand::CHECKS);
 
         if (config('product-updater.api.enabled')) {
             $package->hasRoute('api');
         }
+    }
+
+    #[Override]
+    public function packageBooted(): void
+    {
+        // Short translation namespace (hasTranslations() also registers the full
+        // laranail/product-updater namespace) so keys read product-updater::…
+        $this->loadTranslationsFrom(__DIR__.'/../../resources/lang', 'product-updater');
     }
 
     #[Override]
