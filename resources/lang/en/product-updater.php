@@ -17,7 +17,4 @@ return [
         'applying' => 'Applying update…',
         'updated' => 'Updated to v:version.',
     ],
-    'doctor' => [
-        'summary' => ':pass passed, :warn warning(s), :fail failure(s), :skip skipped.',
-    ],
 ];
