@@ -34,10 +34,6 @@ final class ProductUpdaterServiceProvider extends PackageServiceProvider
             ->hasTranslations('product-updater')
             ->hasCommands(CheckCommand::class, UpdateCommand::class, DoctorCommand::class)
             ->hasDoctorChecks(Checks::all());
-
-        if (config('product-updater.api.enabled')) {
-            $package->hasRoute('api');
-        }
     }
 
     #[Override]
@@ -45,7 +41,21 @@ final class ProductUpdaterServiceProvider extends PackageServiceProvider
     {
         // (Short `product-updater::` translation namespace is now registered by
         // ->hasTranslations('product-updater') in configurePackage.)
+        $this->registerApiRoutes();
         $this->registerLicenseSync();
+    }
+
+    /**
+     * Load the API routes when enabled — at boot, where the merged config is
+     * authoritative. Gating at configurePackage() time reads config before the package
+     * config is merged, so an app that has not published the config (but set
+     * `PRODUCT_UPDATER_API_ENABLED=true`) would silently never register the API routes.
+     */
+    private function registerApiRoutes(): void
+    {
+        if (config('product-updater.api.enabled')) {
+            $this->loadRoutesFrom($this->package->basePath('/routes/api.php'));
+        }
     }
 
     /**
