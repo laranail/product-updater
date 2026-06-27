@@ -14,6 +14,7 @@ use Simtabi\Laranail\Product\Updater\Commands\CheckCommand;
 use Simtabi\Laranail\Product\Updater\Commands\DoctorCommand;
 use Simtabi\Laranail\Product\Updater\Commands\UpdateCommand;
 use Simtabi\Laranail\Product\Updater\Contracts\UpdateSource;
+use Simtabi\Laranail\Product\Updater\Doctor\Checks;
 use Simtabi\Laranail\Product\Updater\Listeners\SyncLicenseState;
 use Simtabi\Laranail\Product\Updater\Sources\HttpUpdateSource;
 use Simtabi\Laranail\Product\Updater\Support\EnvBackup;
@@ -29,9 +30,10 @@ final class ProductUpdaterServiceProvider extends PackageServiceProvider
         $package
             ->name('laranail/product-updater')
             ->hasConfigFile('product-updater')
-            ->hasTranslations()
+            ->withoutConfigNamespacing()
+            ->hasTranslations('product-updater')
             ->hasCommands(CheckCommand::class, UpdateCommand::class, DoctorCommand::class)
-            ->hasDoctorChecks(DoctorCommand::CHECKS);
+            ->hasDoctorChecks(Checks::all());
 
         if (config('product-updater.api.enabled')) {
             $package->hasRoute('api');
@@ -41,10 +43,8 @@ final class ProductUpdaterServiceProvider extends PackageServiceProvider
     #[Override]
     public function packageBooted(): void
     {
-        // Short translation namespace (hasTranslations() also registers the full
-        // laranail/product-updater namespace) so keys read product-updater::…
-        $this->loadTranslationsFrom(__DIR__.'/../../resources/lang', 'product-updater');
-
+        // (Short `product-updater::` translation namespace is now registered by
+        // ->hasTranslations('product-updater') in configurePackage.)
         $this->registerLicenseSync();
     }
 

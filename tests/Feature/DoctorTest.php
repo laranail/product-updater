@@ -2,22 +2,28 @@
 
 declare(strict_types=1);
 
+use Simtabi\Laranail\Package\Tools\Services\Doctor\Checks\ConfigPresentCheck;
 use Simtabi\Laranail\Package\Tools\Services\Doctor\DoctorStatus;
-use Simtabi\Laranail\Product\Updater\Doctor\ConfigurationCheck;
 use Simtabi\Laranail\Product\Updater\Doctor\LicenseCheck;
+
+/** The updater's source-url + product-id config check (now a reusable ConfigPresentCheck). */
+function updaterConfigCheck(): ConfigPresentCheck
+{
+    return new ConfigPresentCheck(['product-updater.source.url', 'product-updater.product_id']);
+}
 
 it('fails the configuration check when source url / product id are missing', function (): void {
     config()->set('product-updater.source.url');
     config()->set('product-updater.product_id');
 
-    expect((new ConfigurationCheck)->run()->status)->toBe(DoctorStatus::Fail);
+    expect(updaterConfigCheck()->run()->status)->toBe(DoctorStatus::Fail);
 });
 
 it('passes the configuration check when source url + product id are set', function (): void {
     config()->set('product-updater.source.url', 'https://updates.test');
     config()->set('product-updater.product_id', 'demo');
 
-    expect((new ConfigurationCheck)->run()->status)->toBe(DoctorStatus::Pass);
+    expect(updaterConfigCheck()->run()->status)->toBe(DoctorStatus::Pass);
 });
 
 it('skips the license check when updates are not license-gated', function (): void {
