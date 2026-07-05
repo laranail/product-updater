@@ -2,7 +2,7 @@
     "name": "laranail/product-updater",
     "description": "Self-update engine for licensed Laravel products — checks an update source, downloads and verifies release archives, extracts files, runs migrations and publishes assets. License-gated via laranail/license-verifier.",
     "keywords": ["laravel", "updater", "self-update", "license", "laranail"],
-    "homepage": "https://opensource.simtabi.com/product-updater/",
+    "homepage": "https://opensource.simtabi.com/documentation/laranail/product-updater/",
     "license": "MIT",
     "authors": [
         { "name": "Simtabi LLC", "email": "opensource@simtabi.com", "homepage": "https://opensource.simtabi.com", "role": "Organization" },
@@ -11,7 +11,7 @@
     "support": {
         "issues": "https://github.com/laranail/product-updater/issues",
         "source": "https://github.com/laranail/product-updater",
-        "docs": "https://opensource.simtabi.com/product-updater/docs/"
+        "docs": "https://opensource.simtabi.com/documentation/laranail/product-updater/"
     },
     "require": {
         "php": "^8.4 || ^8.5",
