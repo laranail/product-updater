@@ -17,7 +17,7 @@ use Throwable;
  * HTTP update source (Botble-style): POSTs check_update and streams
  * download_update to disk.
  */
-final class HttpUpdateSource implements UpdateSource
+class HttpUpdateSource implements UpdateSource
 {
     public function checkUpdate(string $productId, string $currentVersion): ?ProductRelease
     {
@@ -45,7 +45,23 @@ final class HttpUpdateSource implements UpdateSource
             ]));
     }
 
-    private function http(): PendingRequest
+    public function checkConnection(): bool
+    {
+        try {
+            return $this->http()->get('check_connection')->successful();
+        } catch (Throwable) {
+            return false;
+        }
+    }
+
+    public function getUpdateSize(string $updateId): ?int
+    {
+        $length = $this->http()->head('get_update_size/'.$updateId)->header('Content-Length');
+
+        return is_numeric($length) ? (int) $length : null;
+    }
+
+    protected function http(): PendingRequest
     {
         $request = Http::baseUrl(rtrim((string) config('product-updater.source.url'), '/').'/')
             ->timeout((int) config('product-updater.timeout', 300))
@@ -57,7 +73,7 @@ final class HttpUpdateSource implements UpdateSource
                     || ($e instanceof RequestException && (bool) $e->response->serverError()),
                 throw: false,
             )
-            ->withHeaders(array_filter(['X-API-KEY' => config('product-updater.source.api_key')]));
+            ->withHeaders($this->headers());
 
         if (! (bool) config('product-updater.verify_tls', true)) {
             return $request->withoutVerifying();
@@ -67,9 +83,20 @@ final class HttpUpdateSource implements UpdateSource
     }
 
     /**
+     * Request headers for the update server. Overridden by source subclasses
+     * (e.g. the Envato license-bridge uses LB-* headers).
+     *
+     * @return array<string, string>
+     */
+    protected function headers(): array
+    {
+        return array_filter(['X-API-KEY' => (string) config('product-updater.source.api_key')]);
+    }
+
+    /**
      * @param  array<string, mixed>|null  $data
      */
-    private function parse(?array $data): ?ProductRelease
+    protected function parse(?array $data): ?ProductRelease
     {
         if (! $data || ! ($data['status'] ?? false) || empty($data['update_id']) || empty($data['version'])) {
             return null;
@@ -82,6 +109,9 @@ final class HttpUpdateSource implements UpdateSource
             summary: isset($data['summary']) ? trim((string) $data['summary']) : null,
             changelog: isset($data['changelog']) ? trim((string) $data['changelog']) : null,
             hasSql: (bool) ($data['has_sql'] ?? false),
+            checksum: isset($data['checksum']) ? (string) $data['checksum'] : null,
+            signature: isset($data['signature']) ? (string) $data['signature'] : null,
+            minPhp: isset($data['min_php']) ? (string) $data['min_php'] : null,
         );
     }
 }

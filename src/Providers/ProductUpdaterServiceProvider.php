@@ -16,6 +16,7 @@ use Simtabi\Laranail\Product\Updater\Commands\UpdateCommand;
 use Simtabi\Laranail\Product\Updater\Contracts\UpdateSource;
 use Simtabi\Laranail\Product\Updater\Doctor\Checks;
 use Simtabi\Laranail\Product\Updater\Listeners\SyncLicenseState;
+use Simtabi\Laranail\Product\Updater\Sources\EnvatoUpdateSource;
 use Simtabi\Laranail\Product\Updater\Sources\HttpUpdateSource;
 use Simtabi\Laranail\Product\Updater\Support\EnvBackup;
 use Simtabi\Laranail\Product\Updater\Support\UpdateLock;
@@ -83,6 +84,7 @@ final class ProductUpdaterServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         $this->app->bind(UpdateSource::class, static fn (): UpdateSource => match ((string) config('product-updater.source.driver', 'http')) {
+            'envato' => new EnvatoUpdateSource,
             default => new HttpUpdateSource,
         });
 

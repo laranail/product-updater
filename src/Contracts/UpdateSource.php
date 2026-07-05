@@ -26,4 +26,15 @@ interface UpdateSource
      * supplied to authorize the download.
      */
     public function download(string $updateId, string $destination, ?string $licenseToken = null): void;
+
+    /**
+     * Whether the update server is reachable (pre-flight before a download).
+     */
+    public function checkConnection(): bool;
+
+    /**
+     * The size in bytes of a release archive (for disk-space pre-checks), or null
+     * if the server does not report it.
+     */
+    public function getUpdateSize(string $updateId): ?int;
 }

@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial release.
+- **Envato / license-bridge update source** (`source.driver = envato`) — Botble-style
+  `check_connection_ext` / `check_update` / `get_update_size` / `download_update/main/{id}`
+  with LB-* headers (API key, install URL, client IP, language).
+- `UpdateSource::checkConnection()` and `getUpdateSize()` added to the contract.
+- `HttpUpdateSource` now parses `checksum`, `signature` and `min_php` from releases
+  (previously dropped).
 - Self-update engine for licensed Laravel products: checks an update source,
   downloads and verifies release archives, extracts files, runs migrations and
   publishes assets.
