@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Product\Updater\Sources;
 
+use Override;
+use Throwable;
+
 /**
  * Envato / Simtabi "license bridge" update source (Botble-style).
  *
@@ -14,15 +17,17 @@ namespace Simtabi\Laranail\Product\Updater\Sources;
  */
 final class EnvatoUpdateSource extends HttpUpdateSource
 {
+    #[Override]
     public function checkConnection(): bool
     {
         try {
             return $this->http()->post('check_connection_ext')->successful();
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return false;
         }
     }
 
+    #[Override]
     public function download(string $updateId, string $destination, ?string $licenseToken = null): void
     {
         $this->http()
@@ -36,6 +41,7 @@ final class EnvatoUpdateSource extends HttpUpdateSource
     /**
      * @return array<string, string>
      */
+    #[Override]
     protected function headers(): array
     {
         return array_filter([
