@@ -7,7 +7,7 @@ namespace Simtabi\Laranail\Product\Updater\ValueObjects;
 use Carbon\CarbonInterface;
 
 /**
- * An available product release (ported from Botble's CoreProduct value object).
+ * An available product release, shaped to match Botble's CoreProduct payload.
  */
 final readonly class ProductRelease
 {

@@ -262,8 +262,8 @@ final readonly class UpdateManager
     }
 
     /**
-     * Validate an archive (ported from Botble's validateUpdateFile): reject a
-     * bundled .env, ensure the zip opens and is not suspiciously small.
+     * Validate an archive: reject a bundled .env, ensure the zip opens and is
+     * not suspiciously small.
      */
     public function validateArchive(string $archive): void
     {
