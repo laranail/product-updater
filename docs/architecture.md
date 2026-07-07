@@ -1,6 +1,6 @@
 # Architecture
 
-How a self-update is checked, verified, and applied. See the [Documentation index](../README.md#documentation).
+How a self-update is checked, verified, and applied — and the parts that do it.
 
 ## The moving parts
 

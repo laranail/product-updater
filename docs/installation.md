@@ -1,6 +1,6 @@
 # Installation
 
-Install `laranail/product-updater` and publish its config. See the [Documentation index](../README.md#documentation).
+Install `laranail/product-updater` and publish its config.
 
 ## Requirements
 
@@ -20,7 +20,7 @@ The service provider + `ProductUpdater` facade are auto-discovered.
 
 - [Getting started](getting-started.md) — configure a source and run your first update.
 - [Configuration](configuration.md) — every config key.
-- [Commands](tools/commands.md) — `product:update` / `product:update-check` / `product:doctor`.
+- [Commands](tools/commands.md) — `product:update` / `product:update-check` / `product:update-doctor`.
 
 ---
 

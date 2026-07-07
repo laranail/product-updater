@@ -1,6 +1,6 @@
 # Configuration
 
-Every key in `config/product-updater.php`. See the [Documentation index](../README.md#documentation).
+Every key in `config/product-updater.php`, with its env var and purpose.
 
 ## Keys
 

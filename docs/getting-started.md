@@ -1,7 +1,6 @@
 # Getting started
 
-Point the updater at your release source and apply an update. See the
-[Documentation index](../README.md#documentation).
+Point the updater at your release source and apply an update.
 
 ## 1. Install + publish
 
@@ -38,6 +37,7 @@ The update is gated by a valid license via `laranail/license-verifier`.
 ## Next steps
 
 - [Configuration](configuration.md) — channels, steps (migrate/publish), backups, license gating.
+- [Architecture](architecture.md) — how a self-update is checked, verified, and applied.
 - [Commands](tools/commands.md) — the full command set.
 
 ---
