@@ -47,12 +47,6 @@
         "phpstan/phpstan-phpunit": "^2.0",
         "rector/rector": "^2.0"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/laranail/license-verifier"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "Simtabi\\Laranail\\Product\\Updater\\": "src/"
