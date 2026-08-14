@@ -34,7 +34,7 @@ final class ProductUpdaterServiceProvider extends PackageServiceProvider
             ->name('laranail/product-updater')
             ->hasConfigFile('product-updater')
             ->withoutConfigNamespacing()
-            ->hasTranslations('product-updater')
+            ->hasTranslations('laranail-product-updater')
             ->hasCommands(CheckCommand::class, UpdateCommand::class, DoctorCommand::class)
             ->hasDoctorChecks(Checks::all())
             ->hasAboutSection(
@@ -47,8 +47,8 @@ final class ProductUpdaterServiceProvider extends PackageServiceProvider
     #[Override]
     public function packageBooted(): void
     {
-        // (Short `product-updater::` translation namespace is now registered by
-        // ->hasTranslations('product-updater') in configurePackage.)
+        // (Short `laranail-product-updater::` translation namespace is now registered by
+        // ->hasTranslations('laranail-product-updater') in configurePackage.)
         $this->registerApiRoutes();
         $this->registerLicenseSync();
     }

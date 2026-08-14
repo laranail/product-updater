@@ -21,29 +21,29 @@ final class UpdateCommand extends Command
         $release = $this->updater()->checkUpdate();
 
         if (! $release instanceof ProductRelease) {
-            $this->services->display()->success(__('product-updater::product-updater.update.up_to_date'));
+            $this->services->display()->success(__('laranail-product-updater::product-updater.update.up_to_date'));
 
             return self::SUCCESS;
         }
 
         try {
             $archive = $this->services->interaction()->showSpinner(
-                __('product-updater::product-updater.update.downloading', ['version' => $release->version]),
+                __('laranail-product-updater::product-updater.update.downloading', ['version' => $release->version]),
                 fn (): string => $this->updater()->download($release),
             );
 
             if ($this->option('download-only')) {
-                $this->services->display()->success(__('product-updater::product-updater.update.downloaded', ['path' => $archive]));
+                $this->services->display()->success(__('laranail-product-updater::product-updater.update.downloaded', ['path' => $archive]));
 
                 return self::SUCCESS;
             }
 
             $this->services->interaction()->showSpinner(
-                __('product-updater::product-updater.update.applying'),
+                __('laranail-product-updater::product-updater.update.applying'),
                 fn (): bool => $this->updater()->extract($archive),
             );
 
-            $this->services->display()->success(__('product-updater::product-updater.update.updated', ['version' => $release->version]));
+            $this->services->display()->success(__('laranail-product-updater::product-updater.update.updated', ['version' => $release->version]));
 
             return self::SUCCESS;
         } catch (UpdaterException $e) {
