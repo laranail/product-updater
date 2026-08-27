@@ -29,7 +29,7 @@
         "docs": "https://opensource.simtabi.com/documentation/laranail/product-updater/"
     },
     "require": {
-        "php": "^8.4 || ^8.5",
+        "php": "^8.4.1 || ^8.5",
         "ext-zip": "*",
         "illuminate/support": "^13.0",
         "illuminate/http": "^13.0",
