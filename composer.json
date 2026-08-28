@@ -46,7 +46,7 @@
         "pestphp/pest-plugin-laravel": "^4.0",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan-phpunit": "^2.0",
-        "rector/rector": "^2.0"
+        "rector/rector": "^2.5.8"
     },
     "autoload": {
         "psr-4": {
@@ -108,6 +108,16 @@
         {
             "type": "vcs",
             "url": "https://github.com/laranail/license-verifier"
+        },
+        {
+            "type": "composer",
+            "url": "https://repo.packagist.org",
+            "exclude": [
+                "laranail/*"
+            ]
+        },
+        {
+            "packagist.org": false
         }
     ]
 }
