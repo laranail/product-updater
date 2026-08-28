@@ -4,26 +4,26 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Product\Updater\Providers;
 
+use Override;
 use Composer\InstalledVersions;
 use Illuminate\Filesystem\Filesystem;
-use Override;
-use Simtabi\Laranail\Licence\Verifier\Events\LicenseDeactivated;
-use Simtabi\Laranail\Licence\Verifier\Events\LicenseRevoked;
 use Simtabi\Laranail\Package\Tools\Package;
-use Simtabi\Laranail\Package\Tools\Providers\PackageServiceProvider;
-use Simtabi\Laranail\Package\Tools\Support\Definitions\AboutSectionDefinition;
+use Simtabi\Laranail\Product\Updater\Doctor\Checks;
+use Simtabi\Laranail\Product\Updater\UpdateManager;
+use Simtabi\Laranail\Product\Updater\Support\Zipper;
+use Simtabi\Laranail\Product\Updater\Support\EnvBackup;
+use Simtabi\Laranail\Product\Updater\Support\UpdateLock;
 use Simtabi\Laranail\Product\Updater\Commands\CheckCommand;
+use Simtabi\Laranail\Licence\Verifier\Events\LicenseRevoked;
 use Simtabi\Laranail\Product\Updater\Commands\DoctorCommand;
 use Simtabi\Laranail\Product\Updater\Commands\UpdateCommand;
 use Simtabi\Laranail\Product\Updater\Contracts\UpdateSource;
-use Simtabi\Laranail\Product\Updater\Doctor\Checks;
+use Simtabi\Laranail\Product\Updater\Sources\HttpUpdateSource;
+use Simtabi\Laranail\Licence\Verifier\Events\LicenseDeactivated;
 use Simtabi\Laranail\Product\Updater\Listeners\SyncLicenseState;
 use Simtabi\Laranail\Product\Updater\Sources\EnvatoUpdateSource;
-use Simtabi\Laranail\Product\Updater\Sources\HttpUpdateSource;
-use Simtabi\Laranail\Product\Updater\Support\EnvBackup;
-use Simtabi\Laranail\Product\Updater\Support\UpdateLock;
-use Simtabi\Laranail\Product\Updater\Support\Zipper;
-use Simtabi\Laranail\Product\Updater\UpdateManager;
+use Simtabi\Laranail\Package\Tools\Providers\PackageServiceProvider;
+use Simtabi\Laranail\Package\Tools\Support\Definitions\AboutSectionDefinition;
 
 final class ProductUpdaterServiceProvider extends PackageServiceProvider
 {
@@ -40,7 +40,7 @@ final class ProductUpdaterServiceProvider extends PackageServiceProvider
             ->hasAboutSection(
                 AboutSectionDefinition::make('Product Updater')
                     ->field('Version', fn (): string => (string) InstalledVersions::getPrettyVersion('laranail/product-updater'))
-                    ->field('Channel', fn (): string => (string) config('product-updater.channel'))
+                    ->field('Channel', fn (): string => (string) config('product-updater.channel')),
             );
     }
 
@@ -51,6 +51,23 @@ final class ProductUpdaterServiceProvider extends PackageServiceProvider
         // ->hasTranslations('laranail-product-updater') in configurePackage.)
         $this->registerApiRoutes();
         $this->registerLicenseSync();
+    }
+
+    #[Override]
+    public function packageRegistered(): void
+    {
+        $this->app->bind(UpdateSource::class, static fn (): UpdateSource => match ((string) config('product-updater.source.driver', 'http')) {
+            'envato' => new EnvatoUpdateSource,
+            default  => new HttpUpdateSource,
+        });
+
+        $this->app->singleton(UpdateManager::class, static fn ($app): UpdateManager => new UpdateManager(
+            $app->make(UpdateSource::class),
+            $app->make(Zipper::class),
+            $app->make(Filesystem::class),
+            $app->make(EnvBackup::class),
+            $app->make(UpdateLock::class),
+        ));
     }
 
     /**
@@ -76,7 +93,7 @@ final class ProductUpdaterServiceProvider extends PackageServiceProvider
         $events = $this->app['events'];
 
         $map = [
-            LicenseRevoked::class => 'revoked',
+            LicenseRevoked::class     => 'revoked',
             LicenseDeactivated::class => 'deactivated',
         ];
 
@@ -85,22 +102,5 @@ final class ProductUpdaterServiceProvider extends PackageServiceProvider
                 $events->listen($event, [SyncLicenseState::class, $method]);
             }
         }
-    }
-
-    #[Override]
-    public function packageRegistered(): void
-    {
-        $this->app->bind(UpdateSource::class, static fn (): UpdateSource => match ((string) config('product-updater.source.driver', 'http')) {
-            'envato' => new EnvatoUpdateSource,
-            default => new HttpUpdateSource,
-        });
-
-        $this->app->singleton(UpdateManager::class, static fn ($app): UpdateManager => new UpdateManager(
-            $app->make(UpdateSource::class),
-            $app->make(Zipper::class),
-            $app->make(Filesystem::class),
-            $app->make(EnvBackup::class),
-            $app->make(UpdateLock::class),
-        ));
     }
 }

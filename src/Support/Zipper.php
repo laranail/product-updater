@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Product\Updater\Support;
 
-use Simtabi\Laranail\Product\Updater\Exceptions\UpdaterException;
 use ZipArchive;
+use Simtabi\Laranail\Product\Updater\Exceptions\UpdaterException;
 
 /**
  * Thin ZipArchive wrapper for extracting and inspecting update archives.
@@ -31,68 +31,6 @@ final class Zipper
         }
 
         return $extracted;
-    }
-
-    /**
-     * Reject archives whose entries use absolute paths or `..` segments that
-     * resolve outside the destination directory.
-     *
-     * @throws UpdaterException
-     */
-    private function assertNoTraversal(ZipArchive $zip, string $destination): void
-    {
-        $base = $this->normalize($destination);
-
-        for ($i = 0; $i < $zip->numFiles; $i++) {
-            $name = $zip->getNameIndex($i);
-
-            if ($name === false) {
-                continue;
-            }
-
-            if (str_contains($name, "\0")
-                || str_starts_with($name, '/')
-                || str_starts_with($name, '\\')
-                || preg_match('#^[a-zA-Z]:#', $name) === 1) {
-                throw UpdaterException::unsafeArchive($name);
-            }
-
-            $target = $this->normalize($destination.'/'.$name);
-
-            if ($target !== $base && ! str_starts_with($target, $base.'/')) {
-                throw UpdaterException::unsafeArchive($name);
-            }
-        }
-    }
-
-    /**
-     * Resolve `.`/`..` segments lexically (the path need not exist), normalising
-     * separators to `/` for a safe prefix comparison.
-     */
-    private function normalize(string $path): string
-    {
-        $path = str_replace('\\', '/', $path);
-        $absolute = str_starts_with($path, '/');
-
-        $parts = [];
-
-        foreach (explode('/', $path) as $segment) {
-            if ($segment === '') {
-                continue;
-            }
-            if ($segment === '.') {
-                continue;
-            }
-            if ($segment === '..') {
-                array_pop($parts);
-
-                continue;
-            }
-
-            $parts[] = $segment;
-        }
-
-        return ($absolute ? '/' : '').implode('/', $parts);
     }
 
     public function contains(string $archive, string $entry): bool
@@ -136,5 +74,67 @@ final class Zipper
         }
 
         $zip->close();
+    }
+
+    /**
+     * Reject archives whose entries use absolute paths or `..` segments that
+     * resolve outside the destination directory.
+     *
+     * @throws UpdaterException
+     */
+    private function assertNoTraversal(ZipArchive $zip, string $destination): void
+    {
+        $base = $this->normalize($destination);
+
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $name = $zip->getNameIndex($i);
+
+            if ($name === false) {
+                continue;
+            }
+
+            if (str_contains($name, "\0")
+                || str_starts_with($name, '/')
+                || str_starts_with($name, '\\')
+                || preg_match('#^[a-zA-Z]:#', $name) === 1) {
+                throw UpdaterException::unsafeArchive($name);
+            }
+
+            $target = $this->normalize($destination . '/' . $name);
+
+            if ($target !== $base && ! str_starts_with($target, $base . '/')) {
+                throw UpdaterException::unsafeArchive($name);
+            }
+        }
+    }
+
+    /**
+     * Resolve `.`/`..` segments lexically (the path need not exist), normalising
+     * separators to `/` for a safe prefix comparison.
+     */
+    private function normalize(string $path): string
+    {
+        $path = str_replace('\\', '/', $path);
+        $absolute = str_starts_with($path, '/');
+
+        $parts = [];
+
+        foreach (explode('/', $path) as $segment) {
+            if ($segment === '') {
+                continue;
+            }
+            if ($segment === '.') {
+                continue;
+            }
+            if ($segment === '..') {
+                array_pop($parts);
+
+                continue;
+            }
+
+            $parts[] = $segment;
+        }
+
+        return ($absolute ? '/' : '') . implode('/', $parts);
     }
 }

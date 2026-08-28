@@ -14,14 +14,14 @@ beforeEach(function (): void {
 it('checks connection, parses a release (with checksum/signature/min_php) and size, and sends LB headers', function (): void {
     Http::fake([
         'updates.test/check_connection_ext' => Http::response('', 200),
-        'updates.test/check_update' => Http::response([
-            'status' => true,
+        'updates.test/check_update'         => Http::response([
+            'status'    => true,
             'update_id' => 'u-1',
-            'version' => '2.0.0',
-            'checksum' => 'sha256:abc',
+            'version'   => '2.0.0',
+            'checksum'  => 'sha256:abc',
             'signature' => 'sig-xyz',
-            'min_php' => '8.4',
-            'has_sql' => true,
+            'min_php'   => '8.4',
+            'has_sql'   => true,
         ]),
         'updates.test/get_update_size/*' => Http::response('', 200, ['Content-Length' => '4096']),
     ]);

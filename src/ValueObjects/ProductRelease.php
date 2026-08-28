@@ -37,14 +37,14 @@ final readonly class ProductRelease
     public function toArray(): array
     {
         return [
-            'update_id' => $this->updateId,
-            'version' => $this->version,
+            'update_id'   => $this->updateId,
+            'version'     => $this->version,
             'released_at' => $this->releasedAt?->toIso8601String(),
-            'summary' => $this->summary,
-            'changelog' => $this->changelog,
-            'has_sql' => $this->hasSql,
-            'checksum' => $this->checksum,
-            'min_php' => $this->minPhp,
+            'summary'     => $this->summary,
+            'changelog'   => $this->changelog,
+            'has_sql'     => $this->hasSql,
+            'checksum'    => $this->checksum,
+            'min_php'     => $this->minPhp,
         ];
     }
 }

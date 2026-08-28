@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Event;
+use Simtabi\Laranail\Product\Updater\UpdateManager;
+use Simtabi\Laranail\Product\Updater\Support\Zipper;
 use Simtabi\Laranail\Product\Updater\Events\IntegrityCheckFailed;
 use Simtabi\Laranail\Product\Updater\Exceptions\UpdaterException;
-use Simtabi\Laranail\Product\Updater\Support\Zipper;
-use Simtabi\Laranail\Product\Updater\UpdateManager;
 use Simtabi\Laranail\Product\Updater\ValueObjects\ProductRelease;
 
 /**
@@ -17,7 +17,7 @@ use Simtabi\Laranail\Product\Updater\ValueObjects\ProductRelease;
  */
 function makeZip(array $entries): array
 {
-    $path = tempnam(sys_get_temp_dir(), 'lv-zip-').'.zip';
+    $path = tempnam(sys_get_temp_dir(), 'lv-zip-') . '.zip';
     $zip = new ZipArchive;
     $zip->open($path, ZipArchive::CREATE | ZipArchive::OVERWRITE);
     foreach ($entries as $name => $content) {
@@ -31,19 +31,19 @@ function makeZip(array $entries): array
 
 it('refuses to extract an archive with a path-traversal entry (zip-slip)', function (): void {
     [$archive] = makeZip(['../escaped.txt' => 'pwned']);
-    $dest = sys_get_temp_dir().'/lv-extract-'.uniqid();
+    $dest = sys_get_temp_dir() . '/lv-extract-' . uniqid();
     mkdir($dest, 0755, true);
 
     expect(fn () => app(Zipper::class)->extract($archive, $dest))
         ->toThrow(UpdaterException::class, 'unsafe path');
 
     // Nothing was written outside the destination.
-    expect(file_exists(dirname($dest).'/escaped.txt'))->toBeFalse();
+    expect(file_exists(dirname($dest) . '/escaped.txt'))->toBeFalse();
 });
 
 it('refuses an archive with an absolute-path entry', function (): void {
     [$archive] = makeZip(['/etc/evil.txt' => 'pwned']);
-    $dest = sys_get_temp_dir().'/lv-extract-'.uniqid();
+    $dest = sys_get_temp_dir() . '/lv-extract-' . uniqid();
     mkdir($dest, 0755, true);
 
     expect(fn () => app(Zipper::class)->extract($archive, $dest))
@@ -52,11 +52,11 @@ it('refuses an archive with an absolute-path entry', function (): void {
 
 it('extracts a safe archive into the destination', function (): void {
     [$archive] = makeZip(['app/file.txt' => 'ok']);
-    $dest = sys_get_temp_dir().'/lv-extract-'.uniqid();
+    $dest = sys_get_temp_dir() . '/lv-extract-' . uniqid();
     mkdir($dest, 0755, true);
 
     expect(app(Zipper::class)->extract($archive, $dest))->toBeTrue()
-        ->and(file_get_contents($dest.'/app/file.txt'))->toBe('ok');
+        ->and(file_get_contents($dest . '/app/file.txt'))->toBe('ok');
 });
 
 it('aborts the download when the archive checksum does not match', function (): void {
