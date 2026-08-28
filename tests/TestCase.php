@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Product\Updater\Tests;
 
-use Orchestra\Testbench\TestCase as Orchestra;
 use Simtabi\Laranail\Product\Updater\Providers\ProductUpdaterServiceProvider;
 use Simtabi\Laranail\Licence\Verifier\Providers\LicenceVerifierServiceProvider;
+use Simtabi\Laranail\Package\Tools\Testing\IsolatedTestCase;
 
-abstract class TestCase extends Orchestra
+abstract class TestCase extends IsolatedTestCase
 {
     protected function getPackageProviders($app): array
     {
