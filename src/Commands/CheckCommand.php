@@ -33,9 +33,9 @@ final class CheckCommand extends Command
 
         $this->services->display()->info(__('laranail-product-updater::product-updater.check.available', ['version' => $release->version]));
         $this->services->display()->keyValue(array_filter([
-            __('laranail-product-updater::product-updater.check.version')  => $release->version,
+            __('laranail-product-updater::product-updater.check.version') => $release->version,
             __('laranail-product-updater::product-updater.check.released') => $release->releasedAt?->toDayDateTimeString(),
-            __('laranail-product-updater::product-updater.check.summary')  => $release->summary,
+            __('laranail-product-updater::product-updater.check.summary') => $release->summary,
         ]));
 
         return self::SUCCESS;

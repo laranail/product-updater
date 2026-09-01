@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Log;
-use Simtabi\Laranail\Licence\Verifier\Events\LicenseRevoked;
 use Simtabi\Laranail\Licence\Verifier\Events\LicenseDeactivated;
+use Simtabi\Laranail\Licence\Verifier\Events\LicenseRevoked;
 
 it('logs when the verifier reports the license revoked', function (): void {
     Log::spy();

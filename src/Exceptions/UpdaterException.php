@@ -30,7 +30,7 @@ class UpdaterException extends RuntimeException
 
     public static function invalidArchive(string $reason): self
     {
-        return new self('The update archive is invalid: ' . $reason);
+        return new self('The update archive is invalid: '.$reason);
     }
 
     public static function unsafeArchive(string $entry): self
@@ -50,7 +50,7 @@ class UpdaterException extends RuntimeException
 
     public static function requirementsFailed(string $reason): self
     {
-        return new self('System requirements for this update are not met: ' . $reason);
+        return new self('System requirements for this update are not met: '.$reason);
     }
 
     public static function updateInProgress(): self

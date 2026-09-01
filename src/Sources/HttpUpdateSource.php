@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Product\Updater\Sources;
 
-use Throwable;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\RequestException;
-use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Facades\Http;
 use Simtabi\Laranail\Product\Updater\Contracts\UpdateSource;
 use Simtabi\Laranail\Product\Updater\ValueObjects\ProductRelease;
+use Throwable;
 
 /**
  * HTTP update source (Botble-style): POSTs check_update and streams
@@ -22,9 +22,9 @@ class HttpUpdateSource implements UpdateSource
     public function checkUpdate(string $productId, string $currentVersion): ?ProductRelease
     {
         $response = $this->http()->post('check_update', [
-            'product_id'      => $productId,
+            'product_id' => $productId,
             'current_version' => $currentVersion,
-            'channel'         => config('product-updater.channel', 'stable'),
+            'channel' => config('product-updater.channel', 'stable'),
         ]);
 
         return $this->parse($response->json());
@@ -39,8 +39,8 @@ class HttpUpdateSource implements UpdateSource
     {
         $this->http()
             ->withOptions(['sink' => $destination])
-            ->post('download_update/' . $updateId, array_filter([
-                'product_id'    => config('product-updater.product_id'),
+            ->post('download_update/'.$updateId, array_filter([
+                'product_id' => config('product-updater.product_id'),
                 'license_token' => $licenseToken,
             ]));
     }
@@ -56,14 +56,14 @@ class HttpUpdateSource implements UpdateSource
 
     public function getUpdateSize(string $updateId): ?int
     {
-        $length = $this->http()->head('get_update_size/' . $updateId)->header('Content-Length');
+        $length = $this->http()->head('get_update_size/'.$updateId)->header('Content-Length');
 
         return is_numeric($length) ? (int) $length : null;
     }
 
     protected function http(): PendingRequest
     {
-        $request = Http::baseUrl(rtrim((string) config('product-updater.source.url'), '/') . '/')
+        $request = Http::baseUrl(rtrim((string) config('product-updater.source.url'), '/').'/')
             ->timeout((int) config('product-updater.timeout', 300))
             ->acceptJson()
             ->retry(
@@ -94,7 +94,7 @@ class HttpUpdateSource implements UpdateSource
     }
 
     /**
-     * @param array<string, mixed>|null $data
+     * @param  array<string, mixed>|null  $data
      */
     protected function parse(?array $data): ?ProductRelease
     {

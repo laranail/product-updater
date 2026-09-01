@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Simtabi\Laranail\Product\Updater\Doctor\LicenseCheck;
-use Simtabi\Laranail\Package\Tools\Services\Doctor\DoctorStatus;
 use Simtabi\Laranail\Package\Tools\Services\Doctor\Checks\ConfigPresentCheck;
+use Simtabi\Laranail\Package\Tools\Services\Doctor\DoctorStatus;
+use Simtabi\Laranail\Product\Updater\Doctor\LicenseCheck;
 
 /** The updater's source-url + product-id config check (now a reusable ConfigPresentCheck). */
 function updaterConfigCheck(): ConfigPresentCheck

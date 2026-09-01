@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Product\Updater\Commands;
 
-use Simtabi\Laranail\Product\Updater\UpdateManager;
 use Simtabi\Laranail\Console\Tools\Commands\Command as ConsoleCommand;
 use Simtabi\Laranail\Console\Tools\Commands\Concerns\SupportsNamespacedNames;
+use Simtabi\Laranail\Product\Updater\UpdateManager;
 
 abstract class Command extends ConsoleCommand
 {
