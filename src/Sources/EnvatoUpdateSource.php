@@ -32,8 +32,8 @@ final class EnvatoUpdateSource extends HttpUpdateSource
     {
         $this->http()
             ->withOptions(['sink' => $destination])
-            ->post('download_update/main/' . $updateId, array_filter([
-                'product_id'    => config('product-updater.product_id'),
+            ->post('download_update/main/'.$updateId, array_filter([
+                'product_id' => config('product-updater.product_id'),
                 'license_token' => $licenseToken,
             ]));
     }
@@ -46,9 +46,9 @@ final class EnvatoUpdateSource extends HttpUpdateSource
     {
         return array_filter([
             'LB-API-KEY' => (string) config('product-updater.source.api_key'),
-            'LB-URL'     => rtrim((string) url('/'), '/'),
-            'LB-IP'      => $this->clientIp(),
-            'LB-LANG'    => 'english',
+            'LB-URL' => rtrim((string) url('/'), '/'),
+            'LB-IP' => $this->clientIp(),
+            'LB-LANG' => 'english',
         ]);
     }
 
