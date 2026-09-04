@@ -3,17 +3,17 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Event;
+use Simtabi\Laranail\Product\Updater\UpdateManager;
 use Simtabi\Laranail\Product\Updater\Events\RequirementsFailed;
+use Simtabi\Laranail\Product\Updater\Exceptions\UpdaterException;
+use Simtabi\Laranail\Product\Updater\ValueObjects\ProductRelease;
 use Simtabi\Laranail\Product\Updater\Events\SystemUpdateDBMigrated;
 use Simtabi\Laranail\Product\Updater\Events\SystemUpdateDBMigrating;
 use Simtabi\Laranail\Product\Updater\Events\SystemUpdateExtractedFiles;
-use Simtabi\Laranail\Product\Updater\Exceptions\UpdaterException;
-use Simtabi\Laranail\Product\Updater\UpdateManager;
-use Simtabi\Laranail\Product\Updater\ValueObjects\ProductRelease;
 
 function applyZip(array $entries): string
 {
-    $path = tempnam(sys_get_temp_dir(), 'lv-apply-').'.zip';
+    $path = tempnam(sys_get_temp_dir(), 'lv-apply-') . '.zip';
     $zip = new ZipArchive;
     $zip->open($path, ZipArchive::CREATE | ZipArchive::OVERWRITE);
     foreach ($entries as $name => $content) {
@@ -27,7 +27,7 @@ function applyZip(array $entries): string
 
 function tempBase(): string
 {
-    $base = sys_get_temp_dir().'/lv-base-'.uniqid();
+    $base = sys_get_temp_dir() . '/lv-base-' . uniqid();
     mkdir($base, 0755, true);
 
     return $base;
@@ -38,7 +38,7 @@ beforeEach(function (): void {
     config()->set('product-updater.backup_env', false);
     config()->set('product-updater.steps.migrate', false);
     config()->set('product-updater.steps.publish', false);
-    config()->set('product-updater.paths.download', sys_get_temp_dir().'/lv-dl-'.uniqid());
+    config()->set('product-updater.paths.download', sys_get_temp_dir() . '/lv-dl-' . uniqid());
 });
 
 it('aborts the download when the release requires a newer PHP', function (): void {
@@ -57,7 +57,7 @@ it('promotes a staged extract over the configured base and fires the extract eve
     Event::fake([SystemUpdateExtractedFiles::class]);
 
     expect(app(UpdateManager::class)->extract(applyZip(['app/new.txt' => 'updated'])))->toBeTrue()
-        ->and(file_get_contents($base.'/app/new.txt'))->toBe('updated');
+        ->and(file_get_contents($base . '/app/new.txt'))->toBe('updated');
 
     Event::assertDispatched(SystemUpdateExtractedFiles::class);
 });

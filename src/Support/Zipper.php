@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Product\Updater\Support;
 
-use Simtabi\Laranail\Product\Updater\Exceptions\UpdaterException;
 use ZipArchive;
+use Simtabi\Laranail\Product\Updater\Exceptions\UpdaterException;
 
 /**
  * Thin ZipArchive wrapper for extracting and inspecting update archives.
@@ -100,9 +100,9 @@ final class Zipper
                 throw UpdaterException::unsafeArchive($name);
             }
 
-            $target = $this->normalize($destination.'/'.$name);
+            $target = $this->normalize($destination . '/' . $name);
 
-            if ($target !== $base && ! str_starts_with($target, $base.'/')) {
+            if ($target !== $base && ! str_starts_with($target, $base . '/')) {
                 throw UpdaterException::unsafeArchive($name);
             }
         }
@@ -135,6 +135,6 @@ final class Zipper
             $parts[] = $segment;
         }
 
-        return ($absolute ? '/' : '').implode('/', $parts);
+        return ($absolute ? '/' : '') . implode('/', $parts);
     }
 }

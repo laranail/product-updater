@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Product\Updater\Support;
 
+use Throwable;
 use Illuminate\Support\Facades\Cache;
 use Simtabi\Laranail\Product\Updater\Exceptions\UpdaterException;
-use Throwable;
 
 /**
  * Serialises the apply phase so two concurrent updates cannot interleave.
@@ -19,7 +19,8 @@ final readonly class UpdateLock
      *
      * @template T
      *
-     * @param  callable(): T  $callback
+     * @param callable(): T $callback
+     *
      * @return T
      */
     public function run(callable $callback): mixed

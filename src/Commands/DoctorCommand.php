@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Product\Updater\Commands;
 
-use Simtabi\Laranail\Package\Tools\Services\Doctor\DoctorReporter;
 use Simtabi\Laranail\Product\Updater\Doctor\Checks;
+use Simtabi\Laranail\Package\Tools\Services\Doctor\DoctorReporter;
 
 final class DoctorCommand extends Command
 {

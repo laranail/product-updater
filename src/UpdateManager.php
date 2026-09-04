@@ -4,33 +4,33 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Product\Updater;
 
+use Throwable;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
+use Simtabi\Laranail\Product\Updater\Support\Zipper;
 use Simtabi\Laranail\Licence\Verifier\LicenseManager;
-use Simtabi\Laranail\Package\Tools\Services\Doctor\DoctorStatus;
-use Simtabi\Laranail\Product\Updater\Contracts\UpdateSource;
-use Simtabi\Laranail\Product\Updater\Doctor\WritablePathsCheck;
-use Simtabi\Laranail\Product\Updater\Events\IntegrityCheckFailed;
-use Simtabi\Laranail\Product\Updater\Events\RequirementsFailed;
-use Simtabi\Laranail\Product\Updater\Events\SystemUpdateAvailable;
-use Simtabi\Laranail\Product\Updater\Events\SystemUpdateCachesCleared;
-use Simtabi\Laranail\Product\Updater\Events\SystemUpdateCachesClearing;
-use Simtabi\Laranail\Product\Updater\Events\SystemUpdateChecked;
-use Simtabi\Laranail\Product\Updater\Events\SystemUpdateChecking;
-use Simtabi\Laranail\Product\Updater\Events\SystemUpdateDBMigrated;
-use Simtabi\Laranail\Product\Updater\Events\SystemUpdateDBMigrating;
-use Simtabi\Laranail\Product\Updater\Events\SystemUpdateDownloaded;
-use Simtabi\Laranail\Product\Updater\Events\SystemUpdateDownloading;
-use Simtabi\Laranail\Product\Updater\Events\SystemUpdateExtractedFiles;
-use Simtabi\Laranail\Product\Updater\Events\SystemUpdatePublished;
-use Simtabi\Laranail\Product\Updater\Events\SystemUpdatePublishing;
-use Simtabi\Laranail\Product\Updater\Events\SystemUpdateUnavailable;
-use Simtabi\Laranail\Product\Updater\Exceptions\UpdaterException;
 use Simtabi\Laranail\Product\Updater\Support\EnvBackup;
 use Simtabi\Laranail\Product\Updater\Support\UpdateLock;
-use Simtabi\Laranail\Product\Updater\Support\Zipper;
+use Simtabi\Laranail\Product\Updater\Contracts\UpdateSource;
+use Simtabi\Laranail\Product\Updater\Doctor\WritablePathsCheck;
+use Simtabi\Laranail\Product\Updater\Events\RequirementsFailed;
+use Simtabi\Laranail\Package\Tools\Services\Doctor\DoctorStatus;
+use Simtabi\Laranail\Product\Updater\Events\SystemUpdateChecked;
+use Simtabi\Laranail\Product\Updater\Events\IntegrityCheckFailed;
+use Simtabi\Laranail\Product\Updater\Events\SystemUpdateChecking;
+use Simtabi\Laranail\Product\Updater\Exceptions\UpdaterException;
 use Simtabi\Laranail\Product\Updater\ValueObjects\ProductRelease;
-use Throwable;
+use Simtabi\Laranail\Product\Updater\Events\SystemUpdateAvailable;
+use Simtabi\Laranail\Product\Updater\Events\SystemUpdatePublished;
+use Simtabi\Laranail\Product\Updater\Events\SystemUpdateDBMigrated;
+use Simtabi\Laranail\Product\Updater\Events\SystemUpdateDownloaded;
+use Simtabi\Laranail\Product\Updater\Events\SystemUpdatePublishing;
+use Simtabi\Laranail\Product\Updater\Events\SystemUpdateDBMigrating;
+use Simtabi\Laranail\Product\Updater\Events\SystemUpdateDownloading;
+use Simtabi\Laranail\Product\Updater\Events\SystemUpdateUnavailable;
+use Simtabi\Laranail\Product\Updater\Events\SystemUpdateCachesCleared;
+use Simtabi\Laranail\Product\Updater\Events\SystemUpdateCachesClearing;
+use Simtabi\Laranail\Product\Updater\Events\SystemUpdateExtractedFiles;
 
 /**
  * Orchestrates the self-update flow, gated by laranail/license-verifier.
@@ -255,7 +255,7 @@ final readonly class UpdateManager
 
     private function stagingDir(): string
     {
-        return config('product-updater.paths.download', storage_path('app/updates')).'/staging';
+        return config('product-updater.paths.download', storage_path('app/updates')) . '/staging';
     }
 
     /**
@@ -321,6 +321,6 @@ final readonly class UpdateManager
     {
         $dir = (string) config('product-updater.paths.download', storage_path('app/updates'));
 
-        return $dir.'/update_'.str_replace('.', '_', $version).'.zip';
+        return $dir . '/update_' . str_replace('.', '_', $version) . '.zip';
     }
 }
