@@ -35,7 +35,7 @@ final readonly class EnvBackup
         $dir = $this->backupDir();
         $this->files->ensureDirectoryExists($dir);
 
-        $destination = $dir.'/.env.backup-'.date('Ymd_His');
+        $destination = $dir . '/.env.backup-' . date('Ymd_His');
         $this->files->copy($env, $destination);
 
         EnvBackedUp::dispatch($destination);

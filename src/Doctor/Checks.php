@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Product\Updater\Doctor;
 
-use Simtabi\Laranail\Package\Tools\Services\Doctor\Checks\ConfigPresentCheck;
-use Simtabi\Laranail\Package\Tools\Services\Doctor\Checks\PhpExtensionCheck;
 use Simtabi\Laranail\Package\Tools\Services\Doctor\DoctorCheck;
+use Simtabi\Laranail\Package\Tools\Services\Doctor\Checks\PhpExtensionCheck;
+use Simtabi\Laranail\Package\Tools\Services\Doctor\Checks\ConfigPresentCheck;
 
 /**
  * The canonical product-updater health checks — one list reused by the service
