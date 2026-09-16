@@ -33,17 +33,18 @@ PRODUCT_UPDATER_VERSION=1.2.0
 Then check and update:
 
 ```bash
-php artisan product:update-check     # is a newer release available?
-php artisan product:update           # download + verify + apply (refuses when unlicensed)
-php artisan product:update-doctor    # diagnose source, license, paths, permissions
+php artisan laranail::product-updater.check    # is a newer release available?
+php artisan laranail::product-updater.update   # download + verify + apply (refuses when unlicensed)
+php artisan laranail::product-updater.doctor   # diagnose source, license, paths, permissions
 ```
 
-The canonical command names are `laranail::product-updater.check` / `.update` / `.doctor`;
-the `product:*` names above are their short aliases.
+These are the only names. The short `product:*` aliases were removed: Artisan
+keeps command names in a flat global map, so a bare one silently replaces
+whatever claimed it first.
 
 ## The pipeline
 
-`product:update` runs one guarded pipeline: license gate (via `laranail/license-verifier`) →
+`laranail::product-updater.update` runs one guarded pipeline: license gate (via `laranail/license-verifier`) →
 download to `paths.download` → verify (rejects `.env` files and corrupt zips) → back up `.env` →
 extract into `paths.base` → optional `migrate` + `publish` steps → cache clear. Every stage fires
 lifecycle events. See [Architecture](docs/architecture.md).
@@ -62,7 +63,7 @@ Full documentation is at **[opensource.simtabi.com/documentation/laranail/produc
 
 ### Reference
 
-- [Commands](docs/tools/commands.md) — `laranail::product-updater.*` and the `product:*` aliases.
+- [Commands](docs/tools/commands.md) — the three `laranail::product-updater.*` commands and their options.
 
 ## Stability
 

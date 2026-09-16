@@ -13,9 +13,6 @@ final class DoctorCommand extends Command
 
     protected $description = 'Diagnose the product updater environment and configuration';
 
-    /** @var list<string> */
-    protected array $commandAliases = ['product:update-doctor'];
-
     public function handle(): int
     {
         return DoctorReporter::render($this, Checks::all(), (bool) $this->option('json'));

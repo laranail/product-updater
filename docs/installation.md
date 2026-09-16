@@ -20,7 +20,7 @@ The service provider + `ProductUpdater` facade are auto-discovered.
 
 - [Getting started](getting-started.md) — configure a source and run your first update.
 - [Configuration](configuration.md) — every config key.
-- [Commands](tools/commands.md) — `product:update` / `product:update-check` / `product:update-doctor`.
+- [Commands](tools/commands.md) — `laranail::product-updater.update` / `laranail::product-updater.check` / `laranail::product-updater.doctor`.
 
 ---
 
