@@ -4,7 +4,7 @@ How a self-update is checked, verified, and applied — and the parts that do it
 
 ## The moving parts
 
-- **`ProductUpdater`** (+ facade) — the orchestrator behind the `product:*` commands.
+- **`ProductUpdater`** (+ facade) — the orchestrator behind the `laranail::product-updater.*` commands.
 - **Sources** (`Sources/HttpUpdateSource`, `EnvatoUpdateSource`) — resolve the latest release for the
   configured `product_id` + `channel`.
 - **License gate** — before applying, checks a valid license/entitlement via
@@ -18,8 +18,8 @@ How a self-update is checked, verified, and applied — and the parts that do it
 
 ## Flow
 
-1. `product:update-check` asks the source for the latest release and compares it to `current_version`.
-2. `product:update` verifies the license, downloads + validates the archive, extracts it, runs the
+1. `laranail::product-updater.check` asks the source for the latest release and compares it to `current_version`.
+2. `laranail::product-updater.update` verifies the license, downloads + validates the archive, extracts it, runs the
    configured steps, and clears caches — refusing to proceed when unlicensed.
 
 ---

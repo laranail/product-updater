@@ -12,9 +12,6 @@ final class CheckCommand extends Command
 
     protected $description = 'Check whether a product update is available';
 
-    /** @var list<string> */
-    protected array $commandAliases = ['product:update-check'];
-
     public function handle(): int
     {
         $release = $this->updater()->checkUpdate();

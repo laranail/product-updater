@@ -13,9 +13,6 @@ final class UpdateCommand extends Command
 
     protected $description = 'Download and apply the latest product update (license-gated)';
 
-    /** @var list<string> */
-    protected array $commandAliases = ['product:update'];
-
     public function handle(): int
     {
         $release = $this->updater()->checkUpdate();

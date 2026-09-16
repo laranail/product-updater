@@ -28,8 +28,8 @@ Full key reference: [Configuration](configuration.md).
 ## 3. Check + update
 
 ```bash
-php artisan product:update-check     # is a newer release available?
-php artisan product:update           # download + verify + apply (refuses when unlicensed)
+php artisan laranail::product-updater.check     # is a newer release available?
+php artisan laranail::product-updater.update           # download + verify + apply (refuses when unlicensed)
 ```
 
 The update is gated by a valid license via `laranail/license-verifier`.
