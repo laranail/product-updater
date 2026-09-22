@@ -4,7 +4,7 @@
 [![Static analysis](https://github.com/laranail/product-updater/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/laranail/product-updater/actions/workflows/static-analysis.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-`laranail/product-updater` is not published to Packagist, so there is no registry-version badge to show — see [Install](#install).
+`laranail/product-updater` is not published to Packagist, so there is no registry-version badge to show: see [Install](#install).
 
 > License-gated self-update engine for Laravel products — checks an update source (a generic HTTP endpoint or Envato/CodeCanyon), downloads and verifies release archives, then applies them safely (rejects `.env`/corrupt zips, backs up `.env`, runs migrations + asset publishing, clears caches). Refuses to update without a valid license.
 
