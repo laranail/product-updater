@@ -1,5 +1,7 @@
 # Security Policy
 
+Where this file is silent, the [laranail security policy](https://github.com/laranail/.github/blob/HEAD/SECURITY.md) applies.
+
 ## Reporting a Vulnerability
 
 Please report security issues privately to **security@simtabi.com**. Do not open a
