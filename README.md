@@ -14,22 +14,33 @@ Requires PHP `^8.4 || ^8.5`, Laravel `^13`, and [`laranail/license-verifier`](ht
 
 ```bash
 composer require laranail/product-updater
-php artisan vendor:publish --tag=product-updater-config
+php artisan vendor:publish --tag=laranail::product-updater-config
 ```
 
 The service provider and the `ProductUpdater` facade are auto-discovered.
 
-## Quick start
+## Quick start guide and usage
 
-Point the updater at your release source and product identity in `.env`:
+### Getting started
 
-```dotenv
-PRODUCT_UPDATER_SOURCE=http          # http | envato
-PRODUCT_UPDATER_URL=https://releases.example.com/api
-PRODUCT_UPDATER_API_KEY=...
-PRODUCT_UPDATER_PRODUCT_ID=my-product
-PRODUCT_UPDATER_VERSION=1.2.0
-```
+1. Point the updater at your release source and product identity in `.env`:
+
+   ```dotenv
+   PRODUCT_UPDATER_SOURCE=http          # http | envato
+   PRODUCT_UPDATER_URL=https://releases.example.com/api
+   PRODUCT_UPDATER_API_KEY=...
+   PRODUCT_UPDATER_PRODUCT_ID=my-product
+   PRODUCT_UPDATER_VERSION=1.2.0
+   ```
+
+2. Activate a license through `laranail/license-verifier`, since updates are license-gated
+   (`PRODUCT_UPDATER_REQUIRE_LICENSE` defaults to `true`):
+
+   ```bash
+   php artisan laranail::license-verifier.activate YOUR-LICENSE-KEY
+   ```
+
+### Usage
 
 Then check and update:
 
