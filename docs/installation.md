@@ -11,7 +11,7 @@ Install `laranail/product-updater` and publish its config.
 
 ```bash
 composer require laranail/product-updater
-php artisan vendor:publish --tag=product-updater-config
+php artisan vendor:publish --tag=laranail::product-updater-config
 ```
 
 The service provider + `ProductUpdater` facade are auto-discovered.
