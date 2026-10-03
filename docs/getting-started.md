@@ -6,7 +6,7 @@ Point the updater at your release source and apply an update.
 
 ```bash
 composer require laranail/product-updater
-php artisan vendor:publish --tag=product-updater-config
+php artisan vendor:publish --tag=laranail::product-updater-config
 ```
 
 See [Installation](installation.md).
