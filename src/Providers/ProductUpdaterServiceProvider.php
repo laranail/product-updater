@@ -35,6 +35,9 @@ final class ProductUpdaterServiceProvider extends PackageServiceProvider
             ->hasConfigFile('product-updater')
             ->withoutConfigNamespacing()
             ->hasTranslations('laranail-product-updater')
+            // The opt-in API's health route was `product-updater.health` until 0.1. It keeps
+            // resolving, with a deprecation notice, until the next minor after 0.1.
+            ->hasDeprecatedRouteNames(map: ['product-updater.health' => 'laranail-product-updater.health'])
             ->hasCommands(CheckCommand::class, UpdateCommand::class, DoctorCommand::class)
             ->hasDoctorChecks(Checks::all())
             ->hasAboutSection(

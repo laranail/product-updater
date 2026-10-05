@@ -22,6 +22,12 @@ Every key in `config/product-updater.php`, with its env var and purpose.
 | `publish.tag` | `PRODUCT_UPDATER_PUBLISH_TAG` | The vendor-publish tag to run. |
 | `backup_env` | `PRODUCT_UPDATER_BACKUP_ENV` | Back up `.env` before applying (default `true`). |
 | `backup_path` | `PRODUCT_UPDATER_BACKUP_PATH` | Where backups are written. |
+| `api.enabled` | `PRODUCT_UPDATER_API_ENABLED` | Opt-in health endpoint, `GET {prefix}/health`, route `laranail-product-updater.health` (default `false`). |
+| `api.prefix` | `PRODUCT_UPDATER_API_PREFIX` | URL prefix for the endpoint (default `api/product-updater/v1`). |
+
+> The health route was named `product-updater.health` before 0.1. That name is a deprecated alias:
+> `route()` still generates the same URL, with one `E_USER_DEPRECATED` notice, until the next minor
+> after 0.1. `Route::has()` and `routeIs()` read the route collection directly and do not see it.
 
 ## Sources
 
