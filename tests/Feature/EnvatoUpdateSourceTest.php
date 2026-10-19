@@ -9,7 +9,7 @@ use Simtabi\Laranail\Product\Updater\Sources\EnvatoUpdateSource;
 
 beforeEach(function (): void {
     config()->set('product-updater.source.url', 'https://updates.test');
-    config()->set('product-updater.source.api_key', TestCredentials::secret('envato-api-key'));
+    config()->set('product-updater.source.api_key', TestCredentials::secret('envato'));
 });
 
 it('checks connection, parses a release (with checksum/signature/min_php) and size, and sends LB headers', function (): void {
@@ -39,7 +39,7 @@ it('checks connection, parses a release (with checksum/signature/min_php) and si
         ->and($source->getUpdateSize('u-1'))->toBe(4096);
 
     // LB-* headers identify the install to the license bridge.
-    Http::assertSent(fn ($request): bool => $request->hasHeader('LB-API-KEY', TestCredentials::secret('envato-api-key')) && $request->hasHeader('LB-LANG', 'english'));
+    Http::assertSent(fn ($request): bool => $request->hasHeader('LB-API-KEY', TestCredentials::secret('envato')) && $request->hasHeader('LB-LANG', 'english'));
 });
 
 it('is selected by the envato source driver', function (): void {
